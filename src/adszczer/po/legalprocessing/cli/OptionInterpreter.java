@@ -2,28 +2,27 @@ package adszczer.po.legalprocessing.cli;
 
 import adszczer.po.legalprocessing.FileToList;
 import adszczer.po.legalprocessing.parser.Preparser;
+import adszczer.po.legalprocessing.structure.Artykul;
 import adszczer.po.legalprocessing.structure.Document;
 import org.apache.commons.cli.*;
-
 import java.io.IOException;
 import java.util.List;
 
 
 public class OptionInterpreter {
     private static final Option[] OPTIONS = new Option[]{
-            Option.builder("h").argName("pomoc").longOpt("help").desc("wyświetl pomoc").build(),
+            Option.builder("f").argName("plik").hasArg().desc("podaj ścieżkę do pliku").build(),
+            Option.builder("h").argName("pomoc").desc("wyświetl pomoc").build(),
+            Option.builder("S").argName("spisTreści").desc("wyświetl spis treści: działy,rozdziały,tytuły").build(),
+            Option.builder("s").argName("spisTreściDziału").hasArgs().desc("wyświetl spis treści działu").build(),
             Option.builder("d").argName("dział").hasArg().desc("wskaż dział").build(),
             Option.builder("r").argName("rozdział").hasArg().desc("wskaż rozdział").build(),
             Option.builder("a").argName("artykuł").hasArg().desc("wskaż artykuł").build(),
+            Option.builder("A").argName("artykuły").numberOfArgs(2).desc("wskaż przedział artykułów").build(),
             Option.builder("u").argName("ustęp").hasArg().desc("wskaż ustęp").build(),
             Option.builder("p").argName("punkt").hasArg().desc("wskaż punkt").build(),
             Option.builder("q").argName("podpunkt").hasArg().desc("wskaż podpunkt").build(),
 
-            Option.builder("f").argName("plik").hasArg().desc("nazwa pliku").build(),
-
-            Option.builder("A").argName("artykuły").numberOfArgs(2).desc("wskaż przedział artykułów").valueSeparator(',').build(),
-            Option.builder("S").argName("SpisTreści").desc("wyświetl spis treści: działy,rozdziały,tytuły").build(),
-            Option.builder("s").argName("SpisTreściDziału").hasArgs().desc("wyświetl spis treści działu").build(),
     };
 
     private final CommandLine commandLine;
@@ -40,7 +39,7 @@ public class OptionInterpreter {
     }
 
     public void runOptions() throws IOException {
-        if (commandLine.hasOption("h")) {   // jesli da h to zawsze help
+        if (commandLine.hasOption("h")) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("legal-processing", options);
             return;
@@ -49,6 +48,10 @@ public class OptionInterpreter {
         String filename = commandLine.getOptionValue("f");
 
         FileToList filetolist = new FileToList();
+        if(filename == null){
+            System.out.println("Proszę podać ścieżkę bezwzględną do pliku");
+            System.exit(1);
+        }
         List<String> linelist = filetolist.processFileToLineList(filename);
 
         Preparser preparser = new Preparser(linelist);
@@ -58,9 +61,14 @@ public class OptionInterpreter {
         Document doc = parser.parse(filename);
 
         if (commandLine.hasOption("A")) {
-            commandLine.getOptionValue("A");
+            String[] parts = commandLine.getOptionValues("A");
+            String from = parts[0];
+            String to = parts[1];
 
-            // TODO
+            for(Artykul a : doc.getArtykuly(from, to)){
+                System.out.println(a);
+            }
+
             return;
         }
 

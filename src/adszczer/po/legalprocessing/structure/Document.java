@@ -84,4 +84,30 @@ public class Document implements DocumentElement {
 
         return null;
     }
+
+    public Artykul[] getArtykuly(String from, String to) {
+        List<Artykul> ret = new ArrayList<>();
+
+        boolean add = false;
+        outer: for (Dzial d : children) {
+            for (Rozdzial r : d.getChildren()) {
+                for (Artykul a : r.getChildren()) {
+                    if (a.getNumber().equals(from)) {
+                        add = true;
+                    }
+
+                    if(add){
+                        ret.add(a);
+                    }
+
+                    if (a.getNumber().equals(to)) {
+                        add = false;
+                        break outer;
+                    }
+                }
+            }
+        }
+
+        return ret.toArray(new Artykul[0]);
+    }
 }

@@ -5,8 +5,6 @@ import java.util.regex.Pattern;
 
 
 public class Preparser {
-
-
     private static final Pattern KANCELARIA_SEJMU = Pattern.compile("^.Kancelaria Sejmu.*");
     private static final Pattern DATA = Pattern.compile("^[0-9]{4}-(0[0-9]|1[0-2])-[0-3][0-9]");
     private static final Pattern POJEDYNCZY_ZNAK = Pattern.compile(".");
@@ -62,8 +60,6 @@ public class Preparser {
             cleanList.add(firstPart);
             line = secondPart;
         }
-
-        //cleanList.add("^ " + line.chars().mapToObj(ch -> (" " + ch)).collect(Collectors.joining()));
 
         // polaczenie przerwanego slowa
         if(line.endsWith("-")){

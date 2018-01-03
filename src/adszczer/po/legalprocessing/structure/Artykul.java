@@ -2,24 +2,22 @@ package adszczer.po.legalprocessing.structure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Artykul implements DocumentElement {
+
     private final String number;
-    private final String subnumber;
-
-    private DocumentElement parent = null;
+    private Rozdzial parent = null;
     private List<Ustep> children = new ArrayList<>();
-
     private String text;
 
-    public Artykul(String number, String subnumber) {
+    public Artykul(String number) {
         this.number = number;
-        this.subnumber = subnumber;
     }
 
 
     @Override
-    public DocumentElement getParent() {
+    public Rozdzial getParent() {
         return null;
     }
 
@@ -35,7 +33,7 @@ public class Artykul implements DocumentElement {
 
     @Override
     public String getTitle() {
-        return "Art. " + number + subnumber + '.';
+        return "Art. " + number + '.';
     }
 
     public void addChild(Ustep child) {

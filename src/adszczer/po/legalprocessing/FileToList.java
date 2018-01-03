@@ -7,6 +7,9 @@ import java.util.*;
 public class FileToList {
 
     public List<String> processFileToLineList(String filename) throws IOException {
+        if(filename == null){
+            throw new IllegalArgumentException("filename is null");
+        }
 
         List<String> fileByLines = new ArrayList<>();
 

@@ -7,12 +7,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Parser {
-    //potrzebne
     private static final Pattern DZIAL = Pattern.compile("DZIAŁ\\s([A-Z]+)");
 
     private static final Pattern ROZDZIAL = Pattern.compile("Rozdział\\s([I,V,X]+|[0-9]+)");
 
-    private static final Pattern ARTYKUL = Pattern.compile("Art\\.\\s([0-9]+)([a-z]?)\\.");
+    private static final Pattern ARTYKUL = Pattern.compile("Art\\.\\s([0-9]+[a-z]?)\\.");
 
     private static final Pattern USTEP = Pattern.compile("([0-9]+)\\. (.*)");
 
@@ -27,8 +26,6 @@ public class Parser {
                     USTEP + "|" +
                     PUNKT + "|" +
                     PODPUNKT + ")");
-
-    private static final Pattern DRUK_DO_POMINIĘCIA = Pattern.compile("(.*)()");
 
     private final List<String> contents;
     private int line = 0;
@@ -117,19 +114,16 @@ public class Parser {
 
     private Artykul parseArtykul() {
         String number;
-        String sub;
         Matcher matcher = ARTYKUL.matcher(peekLine());
         if (!matcher.matches()) {
             number = null;
-            sub = null;
         } else {
             nextLine();
+            number = matcher.group(1);
 
-            number = /*Integer.parseInt*/(matcher.group(1));
-            sub = matcher.group(2);
         }
 
-        Artykul ret = new Artykul(number, sub);
+        Artykul ret = new Artykul(number);
 
         StringBuilder text = new StringBuilder();
 

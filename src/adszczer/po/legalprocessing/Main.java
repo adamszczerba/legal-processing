@@ -6,7 +6,9 @@ import org.apache.commons.cli.ParseException;
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException, ParseException {
+    public static void main(String[] args) throws ParseException, IOException{
         new OptionInterpreter(args).runOptions();
+
     }
+
 }
