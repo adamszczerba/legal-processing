@@ -22,9 +22,7 @@ public class Main {
         Parser parser = new Parser(cleanlist);
         Document doc = parser.parse("UOKIK");
 
-        System.out.println(doc);
-
-
+        System.out.println(doc.toTOC());
 
     }
 

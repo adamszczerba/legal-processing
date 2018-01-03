@@ -54,4 +54,15 @@ public class Dzial implements DocumentElement{
 
     }
 
+    public String toTOC() {
+        StringBuilder ret = new StringBuilder();
+        ret.append(getTitle());
+        ret.append('\n');
+
+        for(Rozdzial ch : children){
+            ret.append(ch.toTOC());
+        }
+
+        return ret.toString();
+    }
 }

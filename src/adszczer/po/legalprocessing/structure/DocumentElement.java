@@ -12,6 +12,4 @@ public interface DocumentElement {
     public DocumentElement getChild(int index);
 
     public String getTitle();
-
-
 }

@@ -36,6 +36,18 @@ public class Document implements DocumentElement {
         children.add(child);
     }
 
+    public String toTOC(){
+        StringBuilder ret = new StringBuilder();
+        ret.append(title);
+        ret.append('\n');
+
+        for(Dzial ch : children){
+            ret.append(ch.toTOC());
+        }
+
+        return ret.toString();
+    }
+
     @Override
     public String toString(){
         StringBuilder ret = new StringBuilder();
@@ -47,7 +59,5 @@ public class Document implements DocumentElement {
         }
 
         return ret.toString();
-
     }
-
 }

@@ -54,8 +54,6 @@ public class Ustep implements DocumentElement {
         StringBuilder ret = new StringBuilder();
         ret.append(getTitle());
         ret.append(' ');
-        ret.append(getText());
-        ret.append('\n');
 
         for (Punkt ch : children) {
             ret.append(ch);

@@ -38,6 +38,15 @@ public class Rozdzial implements DocumentElement {
         children.add(artykul);
     }
 
+    public String toTOC() {
+        StringBuilder ret = new StringBuilder();
+        ret.append(getTitle());
+        ret.append('\n');
+
+        return ret.toString();
+
+    }
+
     @Override
     public String toString() {
         StringBuilder ret = new StringBuilder();

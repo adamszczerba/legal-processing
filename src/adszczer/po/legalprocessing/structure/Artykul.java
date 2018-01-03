@@ -55,8 +55,8 @@ public class Artykul implements DocumentElement{
         StringBuilder ret = new StringBuilder();
         ret.append(getTitle());
         ret.append('\n');
-        ret.append(getText());
-        ret.append('\n');
+        //ret.append(getText());
+        //ret.append('\n');
 
         for(Ustep u : children){
             ret.append(u);
