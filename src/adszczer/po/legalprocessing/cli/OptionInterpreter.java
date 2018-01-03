@@ -1,6 +1,12 @@
 package adszczer.po.legalprocessing.cli;
 
+import adszczer.po.legalprocessing.FileToList;
+import adszczer.po.legalprocessing.parser.Preparser;
+import adszczer.po.legalprocessing.structure.Document;
 import org.apache.commons.cli.*;
+
+import java.io.IOException;
+import java.util.List;
 
 
 public class OptionInterpreter {
@@ -13,23 +19,43 @@ public class OptionInterpreter {
             Option.builder("p").argName("punkt").hasArg().desc("wskaż punkt").build(),
             Option.builder("q").argName("podpunkt").hasArg().desc("wskaż podpunkt").build(),
 
+            Option.builder("f").argName("plik").hasArg().desc("nazwa pliku").build(),
+
             Option.builder("A").argName("artykuły").numberOfArgs(2).desc("wskaż przedział artykułów").valueSeparator(',').build(),
-            Option.builder("S").argName("SpisTreści").hasArgs().desc("wyświetl spis treści: działy,rozdziały,tytuły").build(),
+            Option.builder("S").argName("SpisTreści").desc("wyświetl spis treści: działy,rozdziały,tytuły").build(),
             Option.builder("s").argName("SpisTreściDziału").hasArgs().desc("wyświetl spis treści działu").build(),
     };
+
     private final CommandLine commandLine;
     private Options options = new Options();
 
     public OptionInterpreter(String[] args) throws ParseException {
         CommandLineParser parser = new DefaultParser();
+
+        for (Option opt : OPTIONS) {
+            options.addOption(opt);
+        }
+
         commandLine = parser.parse(options, args);
     }
 
-    public void runOptions() {
+    public void runOptions() throws IOException {
         if (commandLine.hasOption("h")) {   // jesli da h to zawsze help
-            //printHelp();
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp("legal-processing", options);
             return;
         }
+
+        String filename = commandLine.getOptionValue("f");
+
+        FileToList filetolist = new FileToList();
+        List<String> linelist = filetolist.processFileToLineList(filename);
+
+        Preparser preparser = new Preparser(linelist);
+        List<String> cleanlist = preparser.preparse();
+
+        adszczer.po.legalprocessing.parser.Parser parser = new adszczer.po.legalprocessing.parser.Parser(cleanlist);
+        Document doc = parser.parse(filename);
 
         if (commandLine.hasOption("A")) {
             commandLine.getOptionValue("A");
@@ -39,13 +65,13 @@ public class OptionInterpreter {
         }
 
         if (commandLine.hasOption("S")) {
-
-            //wypisz spis tresci calosci: dzialy rozdzialy tytuly
+            System.out.println(doc.toTOC());
             return;
         }
 
         if (commandLine.hasOption("s")) {
-            //wypisz spis dzialu o numerze
+            String dzialNum = commandLine.getOptionValue("s");
+            System.out.println(doc.getDzial(dzialNum).toTOC());
             return;
         }
 
@@ -67,21 +93,24 @@ public class OptionInterpreter {
             q = commandLine.getOptionValue("q");
         }
 
-        if(q == null && p == null && u == null){
-            //zwroc caly artykol
-
-        }else if(q == null && p == null){
-            //zwroc artykul i ustep
-
-        }else if(q == null){
-            //zwroc art, ust, punkt
-
-        }else{
-            //zwroc art, ust, punkt, podpunkt
-
+        if (a == null) {
+            System.err.println("Potrzeba -a!");
+            return;
         }
 
+        if (q == null && p == null && u == null) {
+            //zwroc caly artykul
+            System.out.println(doc.getArtykul(a));
+
+        } else if (q == null && p == null) {
+            //zwroc artykul i ustep
+            System.out.println(doc.getArtykul(a).getUstep(u));
+        } else if (q == null) {
+            //zwroc art, ust, punkt
+            System.out.println(doc.getArtykul(a).getUstep(u).getPunkt(p));
+        } else {
+            //zwroc art, ust, punkt, podpunkt
+            System.out.println(doc.getArtykul(a).getUstep(u).getPunkt(p).getPodpunkt(q));
+        }
     }
-
-
 }

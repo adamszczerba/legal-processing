@@ -5,13 +5,15 @@ import java.util.List;
 
 public class Rozdzial implements DocumentElement {
 
+    private final String title;
     private final String number;
     private Dzial parent = null;
     private List<Artykul> children = new ArrayList<>();
 
 
-    public Rozdzial(String number) {
+    public Rozdzial(String number, String title) {
         this.number = number;
+        this.title = title;
     }
 
     @Override
@@ -31,7 +33,7 @@ public class Rozdzial implements DocumentElement {
 
     @Override
     public String getTitle() {
-        return "Rozdział " + number;
+        return "Rozdział " + number + " : " + title;
     }
 
     public void addChild(Artykul artykul) {
@@ -40,8 +42,11 @@ public class Rozdzial implements DocumentElement {
 
     public String toTOC() {
         StringBuilder ret = new StringBuilder();
-        ret.append(getTitle());
-        ret.append('\n');
+        if (title != null) {
+            ret.append(getTitle());
+            ret.append('\n');
+        }
+
 
         return ret.toString();
 
@@ -59,5 +64,25 @@ public class Rozdzial implements DocumentElement {
 
         return ret.toString();
 
+
     }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public Artykul getArtykul(String num) {
+        if(num.equals("0")) num = null;
+        for(Artykul a : children){
+            if(a.getNumber().equals(num)){
+                return a;
+            }
+        }
+
+        return null;
+    }
+
+
 }
+
+

@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Punkt implements DocumentElement {
 
-    private final int number;
+    private final String number;
 
     private Ustep parent = null;
     private List<Podpunkt> children = new ArrayList<>();
     private String text;
 
-    public Punkt(int number) {
+    public Punkt(String number) {
         this.number = number;
     }
 
@@ -62,5 +62,21 @@ public class Punkt implements DocumentElement {
 
         return ret.toString();
 
+    }
+
+
+    public String getNumber() {
+        return number;
+    }
+
+    public Podpunkt getPodpunkt(String num) {
+        if(num.equals("0")) num = null;
+        for (Podpunkt q : children) {
+            if (q.getNumber().equals(num)) {
+                return q;
+            }
+        }
+
+        return null;
     }
 }

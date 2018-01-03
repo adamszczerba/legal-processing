@@ -3,12 +3,12 @@ package adszczer.po.legalprocessing.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Dzial implements DocumentElement{
+public class Dzial implements DocumentElement {
 
     private final String number;
+    private final String title;
     private Document parent = null;
     private List<Rozdzial> children = new ArrayList<>();
-    private final String title;
 
     public Dzial(String number, String title) {
         this.title = title;
@@ -33,7 +33,7 @@ public class Dzial implements DocumentElement{
 
     @Override
     public String getTitle() {
-        return "Dział " + number + ": " + title;
+        return "Dział " + number + " : " + title;
     }
 
     public void addRozdzial(Rozdzial rozdzial) {
@@ -41,12 +41,14 @@ public class Dzial implements DocumentElement{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder ret = new StringBuilder();
-        ret.append(getTitle());
+        if (title != null) {
+            ret.append(getTitle());
+        }
         ret.append('\n');
 
-        for(Rozdzial ch : children){
+        for (Rozdzial ch : children) {
             ret.append(ch);
         }
 
@@ -56,13 +58,33 @@ public class Dzial implements DocumentElement{
 
     public String toTOC() {
         StringBuilder ret = new StringBuilder();
-        ret.append(getTitle());
-        ret.append('\n');
+        if (title != null) {
+            ret.append(getTitle());
+            ret.append('\n');
+        }
 
-        for(Rozdzial ch : children){
+        for (Rozdzial ch : children) {
             ret.append(ch.toTOC());
         }
 
         return ret.toString();
     }
+
+
+    public String getNumber() {
+        return number;
+    }
+
+    public Rozdzial getRozdzial ( String num){
+        if(num.equals("0")) num = null;
+        for(Rozdzial r : children){
+            if(r.getNumber().equals(num)){
+                return r;
+            }
+        }
+
+        return null;
+    }
+
+
 }

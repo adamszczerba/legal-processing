@@ -50,4 +50,8 @@ public class Podpunkt implements DocumentElement{
         return ret.toString();
 
     }
+
+    public String getNumber() {
+        return letter;
+    }
 }

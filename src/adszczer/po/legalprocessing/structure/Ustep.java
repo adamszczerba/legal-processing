@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ustep implements DocumentElement {
-    private final int number;
+    private final String number;
 
     private Artykul parent = null;
     private List<Punkt> children = new ArrayList<>();
     private String text;
 
-    public Ustep(int number) {
+    public Ustep(String number) {
         this.number = number;
     }
 
@@ -54,6 +54,8 @@ public class Ustep implements DocumentElement {
         StringBuilder ret = new StringBuilder();
         ret.append(getTitle());
         ret.append(' ');
+        ret.append(getText());
+        ret.append('\n');
 
         for (Punkt ch : children) {
             ret.append(ch);
@@ -62,5 +64,21 @@ public class Ustep implements DocumentElement {
         return ret.toString();
 
     }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public Punkt getPunkt (String num) {
+        if(num.equals("0")) num = null;
+        for(Punkt p : children){
+            if(p.getNumber().equals(num)){
+                return p;
+            }
+        }
+
+        return null;
+    }
+
 }
 

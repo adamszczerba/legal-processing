@@ -3,8 +3,8 @@ package adszczer.po.legalprocessing.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Artykul implements DocumentElement{
-    private final int number;
+public class Artykul implements DocumentElement {
+    private final String number;
     private final String subnumber;
 
     private DocumentElement parent = null;
@@ -12,7 +12,7 @@ public class Artykul implements DocumentElement{
 
     private String text;
 
-    public Artykul(int number, String subnumber) {
+    public Artykul(String number, String subnumber) {
         this.number = number;
         this.subnumber = subnumber;
     }
@@ -42,27 +42,44 @@ public class Artykul implements DocumentElement{
         children.add(child);
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public String getText() {
         return this.text;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder ret = new StringBuilder();
         ret.append(getTitle());
         ret.append('\n');
-        //ret.append(getText());
-        //ret.append('\n');
+        ret.append(getText());
+        ret.append('\n');
 
-        for(Ustep u : children){
+        for (Ustep u : children) {
             ret.append(u);
         }
 
         return ret.toString();
 
     }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public Ustep getUstep(String num) {
+        if(num.equals("0")) num = null;
+
+        for (Ustep u : children) {
+            if (u.getNumber().equals(num)) {
+                return u;
+            }
+        }
+
+        return null;
+    }
+
 }

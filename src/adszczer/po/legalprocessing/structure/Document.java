@@ -5,10 +5,10 @@ import java.util.List;
 
 public class Document implements DocumentElement {
 
-    private List<Dzial> children = new ArrayList<>();
     private final String title;
+    private List<Dzial> children = new ArrayList<>();
 
-    public Document(String title){
+    public Document(String title) {
         this.title = title;
     }
 
@@ -36,12 +36,12 @@ public class Document implements DocumentElement {
         children.add(child);
     }
 
-    public String toTOC(){
+    public String toTOC() {
         StringBuilder ret = new StringBuilder();
         ret.append(title);
         ret.append('\n');
 
-        for(Dzial ch : children){
+        for (Dzial ch : children) {
             ret.append(ch.toTOC());
         }
 
@@ -49,15 +49,39 @@ public class Document implements DocumentElement {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder ret = new StringBuilder();
         ret.append(title);
         ret.append('\n');
 
-        for(Dzial ch : children){
+        for (Dzial ch : children) {
             ret.append(ch);
         }
 
         return ret.toString();
+    }
+
+    public Dzial getDzial(String num) {
+        for (Dzial dz : children) {
+            if (dz.getNumber().equals(num)) {
+                return dz;
+            }
+        }
+
+        return null;
+    }
+
+    public Artykul getArtykul(String number) {
+        for (Dzial d : children) {
+            for (Rozdzial r : d.getChildren()) {
+                for (Artykul a : r.getChildren()) {
+                    if (a.getNumber().equals(number)) {
+                        return a;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 }

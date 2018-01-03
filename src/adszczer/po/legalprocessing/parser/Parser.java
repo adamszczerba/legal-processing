@@ -10,7 +10,7 @@ public class Parser {
     //potrzebne
     private static final Pattern DZIAL = Pattern.compile("DZIAŁ\\s([A-Z]+)");
 
-    private static final Pattern ROZDZIAL = Pattern.compile("Rozdział\\s([I,V,X]+)");
+    private static final Pattern ROZDZIAL = Pattern.compile("Rozdział\\s([I,V,X]+|[0-9]+)");
 
     private static final Pattern ARTYKUL = Pattern.compile("Art\\.\\s([0-9]+)([a-z]?)\\.");
 
@@ -64,7 +64,6 @@ public class Parser {
 
     public Dzial parseDzial() {
         String title;
-
         String number;
         Matcher matcher = DZIAL.matcher(peekLine());
         if (!matcher.matches()) {
@@ -88,16 +87,22 @@ public class Parser {
 
     private Rozdzial parseRozdzial() {
         String number;
+        StringBuilder title = new StringBuilder();
         Matcher matcher = ROZDZIAL.matcher(peekLine());
         if (!matcher.matches()) {
             number = null;
+            title = null;
         } else {
             nextLine();
 
             number = matcher.group(1);
+            while(!ARTYKUL.matcher(peekLine()).matches()){
+                title.append(nextLine());//PIERWOTNIE BEZ PETLI, NEXTLINE I BEZ STRINGBUILDER
+                title.append(", ");
+            }
         }
 
-        Rozdzial ret = new Rozdzial(number);
+        Rozdzial ret = new Rozdzial(number, title == null ? null : title.toString());
 
         while (
                 hasLines() &&
@@ -111,16 +116,16 @@ public class Parser {
     }
 
     private Artykul parseArtykul() {
-        int number;
+        String number;
         String sub;
         Matcher matcher = ARTYKUL.matcher(peekLine());
         if (!matcher.matches()) {
-            number = 0;
+            number = null;
             sub = null;
         } else {
             nextLine();
 
-            number = Integer.parseInt(matcher.group(1));
+            number = /*Integer.parseInt*/(matcher.group(1));
             sub = matcher.group(2);
         }
 
@@ -151,15 +156,15 @@ public class Parser {
 
 
     private Ustep parseUstep() {
-        int number;
+        String number;
         StringBuilder text = new StringBuilder();
         Matcher matcher = USTEP.matcher(peekLine());
         if (!matcher.matches()) {
-            number = 0;
+            number = null;
         } else {
             nextLine();
 
-            number = Integer.parseInt(matcher.group(1));
+            number = (matcher.group(1));
             text.append(matcher.group(2));
             text.append('\n');
         }
@@ -188,7 +193,7 @@ public class Parser {
     }
 
     private Punkt parsePunkt() {
-        int number;
+        String number;
         StringBuilder text = new StringBuilder();
         Matcher matcher = PUNKT.matcher(peekLine());
         if (!matcher.matches()) {
@@ -196,7 +201,7 @@ public class Parser {
         } else {
             nextLine();
 
-            number = Integer.parseInt(matcher.group(1));
+            number = (matcher.group(1));
             text.append(matcher.group(2));
             text.append('\n');
         }
@@ -247,7 +252,7 @@ public class Parser {
     }
 
 
-    private String parseText() {
+    /*private String parseText() {
         StringBuilder text = new StringBuilder();
 
         while (
@@ -261,5 +266,5 @@ public class Parser {
         }
 
         return text.toString();
-    }
+    }*/
 }
