@@ -33,7 +33,11 @@ public class Dzial implements DocumentElement {
 
     @Override
     public String getTitle() {
-        return "Dział " + number + " : " + title;
+        if (number != null){
+            return "Dział " + number + " : " + title;
+        }else{
+            return null;
+        }
     }
 
     public void addRozdzial(Rozdzial rozdzial) {

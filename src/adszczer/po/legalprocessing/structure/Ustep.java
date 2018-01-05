@@ -31,7 +31,11 @@ public class Ustep implements DocumentElement {
 
     @Override
     public String getTitle() {
-        return number + ".";
+        if(number != null){
+            return number + ".";
+        }else{
+            return "";
+        }
     }
 
     public void addPunkt(Punkt punkt) {

@@ -19,7 +19,6 @@ public class Preparser {
         this.fileContents = fileContents;
     }
 
-    //glowna metoda klasy do czyszczenia listy
     public List<String> preparse() {
         Iterator<String> iter = fileContents.iterator();
         String line;

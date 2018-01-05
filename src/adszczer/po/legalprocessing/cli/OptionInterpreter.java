@@ -102,7 +102,8 @@ public class OptionInterpreter {
         }
 
         if (a == null) {
-            System.err.println("Potrzeba -a!");
+            //System.err.println("podaj -a!");
+            System.out.println(doc.toString());
             return;
         }
 

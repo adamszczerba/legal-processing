@@ -33,7 +33,11 @@ public class Rozdzial implements DocumentElement {
 
     @Override
     public String getTitle() {
-        return "Rozdział " + number + " : " + title;
+        if(number != null){
+            return "Rozdział " + number + " : " + title;
+        }else{
+            return "";
+        }
     }
 
     public void addChild(Artykul artykul) {

@@ -94,7 +94,7 @@ public class Parser {
 
             number = matcher.group(1);
             while(!ARTYKUL.matcher(peekLine()).matches()){
-                title.append(nextLine());//PIERWOTNIE BEZ PETLI, NEXTLINE I BEZ STRINGBUILDER
+                title.append(nextLine());
                 title.append(", ");
             }
         }
@@ -245,20 +245,4 @@ public class Parser {
         return ret;
     }
 
-
-    /*private String parseText() {
-        StringBuilder text = new StringBuilder();
-
-        while (
-                hasLines() &&
-                        !DZIAL.matcher(peekLine()).matches() &&
-                        !ROZDZIAL.matcher(peekLine()).matches() &&
-                        !ARTYKUL.matcher(peekLine()).matches()
-                ) {
-            text.append(nextLine());
-            text.append('\n');
-        }
-
-        return text.toString();
-    }*/
 }
